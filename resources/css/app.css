@@ -2,6 +2,67 @@ body{
     background-color: #a6a6a6;
 }
 
+#app{
+    display: flex;
+}
+
+#panel{
+    margin-left: 3vh;
+    display: flex;
+    flex: 0;
+    flex-direction: column;
+    border: 0px solid red;
+}
+
+#create-btn{
+    background-color: #03798f;
+    border: 1px solid #03798f;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 40%;
+    height: 5vh;
+    margin-bottom: 2vh;
+    align-self: center;
+}
+
+#create-btn:active{
+    background-color: #035260;
+}
+
+#studen-panel{
+    background-color: #0097b2;
+    border-radius: 20px;
+    height: 80vh;
+    width: 130vh;
+}
+
+#summary-container{
+    display: flex;
+    margin: 0vh;
+}
+
+#summary-container > button{
+    height: 10vh;
+    width: 9vh;
+    align-self: center;
+    margin-right: 3vh;
+}
+
+#summary-box{
+    margin: 2.5vh;
+    background-color: #ffffff;
+    border: 10px solid #03798f;
+    border-radius: 10px;
+    width: 70%;
+    height: 10%;
+    line-height: 2vh;
+    text-align: center;
+}
+
+
+
+
+/*-----Temp/Prototype Css's lol*/
+
 .student-card{
     margin-bottom: 5vh;
     display: flex;

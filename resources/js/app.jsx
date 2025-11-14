@@ -1,14 +1,29 @@
 import React from "react";
 import "../css/app.css";
 import ReactDOM from "react-dom/client";
-import Hola from "./components/Hola.jsx";
-import Hello from "./components/Hello.jsx";
+import Temp from "./components/Temp";
+import { useEffect, useState } from "react";
 
 function App() {
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        fetch("http://localhost/laravel-crud/public/students")
+        .then(res => res.json())
+        .then(data => setStudents(data))
+        .catch(err => console.log(err))
+    }, []);
+
     return( 
     <>
-    <Hola/>
-    <Hello/>
+        {students.map(student => (
+            <Temp
+            key={student.id}
+            fullName={student.fullName}
+            courseNsection={student.courseNsection}
+            studentID={student.studentID}
+            />
+        ))}
     </>
     );
 }

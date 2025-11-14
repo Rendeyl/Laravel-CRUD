@@ -1,8 +1,35 @@
-#textword{
-    color: blue;
-    border: 1px solid black;
+body{
+    background-color: #a6a6a6;
 }
 
-#test2{
-    background: red;
+.student-card{
+    margin-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+    background-color: #d9d9d9;
+    height: 60vh;
+    width: 40vh;
+}
+
+#student-image{
+    height: 20vh;
+    width: 50%;
+}
+
+#student-name{
+    margin-bottom: 0vh;
+}
+
+#student-course{
+    margin-top: 0.5vh;
+    margin-bottom: 0.5vh;
+}
+
+#student-id{
+    margin: 0vh;
 }

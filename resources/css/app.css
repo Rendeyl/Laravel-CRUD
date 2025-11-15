@@ -7,6 +7,7 @@ body{
 }
 
 #panel{
+    margin-top: 5vh;
     margin-left: 3vh;
     display: flex;
     flex: 0;
@@ -45,6 +46,12 @@ body{
     width: 9vh;
     align-self: center;
     margin-right: 3vh;
+    background-color: #03798f;
+    border: 1px solid #03798f;
+}
+
+#summary-container > button:active{
+    background-color: #035260;
 }
 
 #summary-box{
@@ -58,8 +65,55 @@ body{
     text-align: center;
 }
 
+.summary-btn{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
 
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #03798f;
+    padding: 5vh;
+    border-radius: 12px;
+    width: 400px;
+}
+
+#modal-box{
+    display: flex;
+    border: 0px solid lawngreen;
+}
+
+#pfp-preview{
+    border: 1px solid black;
+    height: 25vh;
+    width: 25vh;
+}
+
+#student-form{
+    border: 0px solid red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+}
+
+#student-form > input{
+    height: 4vh;
+}
 
 /*-----Temp/Prototype Css's lol*/
 

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string("fullName");
             $table->string("courseNsection");
             $table->integer('studentID')->unique();
+            $table->string('pfp')->nullable();
+            $table->decimal('gwa', 3, 2)->nullable();
             $table->timestamps();
         });
     }

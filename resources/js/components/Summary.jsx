@@ -1,6 +1,6 @@
 import React from "react";
 
-function Summary({fullName}){
+function Summary({id, fullName, onDelete}){
     return(
         <div id="summary-container">
 
@@ -17,7 +17,8 @@ function Summary({fullName}){
             </button>
 
             <button className="ved-btns">
-            <img className="summary-btn" id="delete-btn" src="http://localhost/laravel-crud/public/storage/delete.png" alt="delete"/>
+            <img className="summary-btn" id="delete-btn" src="http://localhost/laravel-crud/public/storage/delete.png" alt="delete"
+            onClick={() => onDelete(id)}/>
             </button>
 
         </div>

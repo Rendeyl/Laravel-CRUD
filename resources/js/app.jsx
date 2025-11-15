@@ -78,6 +78,24 @@ function App() {
   .catch(err => console.error(err));
 };
 
+  //Delete Student Data
+  const handleDelete = (id) => {
+    fetch(`/students/${id}`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            setSummary(prev => prev.filter(student => student.id !== id));
+        }
+    })
+    .catch(err => console.error(err));
+};
+
+
     return( 
     <>
 
@@ -118,7 +136,9 @@ function App() {
 
         {summary.map(content =>(
             <Summary
+            id={content.id}
             fullName={content.fullName}
+            onDelete={handleDelete}
             />
         ))}
 

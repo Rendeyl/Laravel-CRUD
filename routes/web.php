@@ -16,6 +16,8 @@ Route::get('/students', function () {
         ->header('Access-Control-Allow-Headers', '*');
 });
 
-Route::post('/add-student', [StudentController::class, 'addStudent'])
+Route::delete('/students/{id}', [StudentController::class, 'deleteStudent']);
+
+Route::post('/add-student', [StudentController::class, 'addStudent']);
 
 ?>

@@ -53,9 +53,7 @@ class StudentController extends Controller
     // Find the student by ID
     $student = Student::find($id);
 
-    if (!$student) {
-        return response()->json(['message' => 'Student not found'], 404);
-    }
+    if (!$student) return response()->json(['message' => 'Student not found'], 404);
 
     return response()->json($student);
 }

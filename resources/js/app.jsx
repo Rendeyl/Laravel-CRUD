@@ -27,17 +27,13 @@ function App() {
     //For previewing selected pfp
     const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPfp(URL.createObjectURL(file));
-    }
+    if (file) setPfp(URL.createObjectURL(file));
   };
 
   //For removing selected pfp
   function removePicture(){
     setPfp(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
+    if (fileInputRef.current) fileInputRef.current.value = null;
   };
 
   //For adding new student
@@ -51,9 +47,7 @@ function App() {
   formData.append("studentID", e.target.studentID.value);
   formData.append("gwa", e.target.gwa.value);
 
-  if (fileInputRef.current && fileInputRef.current.files[0]) {
-    formData.append("pfp", fileInputRef.current.files[0]);
-  }
+  if (fileInputRef.current && fileInputRef.current.files[0]) formData.append("pfp", fileInputRef.current.files[0]);
 
   //console.log([...formData]);
 
@@ -88,9 +82,7 @@ function App() {
     })
     .then(res => res.json())
     .then(data => {
-        if (data.success) {
-            setSummary(prev => prev.filter(student => student.id !== id));
-        }
+        if (data.success) setSummary(prev => prev.filter(student => student.id !== id));
     })
     .catch(err => console.error(err));
 };

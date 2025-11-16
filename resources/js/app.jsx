@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import Summary from "./components/Summary";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
+import Temp from "./components/Temp";
 
 function App() {
 
@@ -17,6 +18,13 @@ function App() {
     const [pfp, setPfp] = useState(null);
     const fileInputRef = React.useRef(null);
 
+    //Current ID View
+    const [fullName, setFullName] = useState("Full Name");
+    const [courseNsection, setCourseNsection] = useState("Course & Section");
+    const [StudentID, setStudentID] = useState("Studen ID");
+    const [gwa, setGwa] = useState(0.00);
+    const [pfpView, setPfpView] = useState(null);
+
     useEffect(() => {
         fetch("/students")
         .then(res => res.json())
@@ -28,7 +36,7 @@ function App() {
     const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) setPfp(URL.createObjectURL(file));
-  };
+    };
 
   //For removing selected pfp
   function removePicture(){
@@ -85,7 +93,29 @@ function App() {
         if (data.success) setSummary(prev => prev.filter(student => student.id !== id));
     })
     .catch(err => console.error(err));
-};
+  };
+
+  const handleView = (id) =>{
+    console.log(id);
+    fetch(`/student-view/${id}`, {
+      method: "GET",
+      headers: {
+            "X-CSRF-TOKEN": csrfToken
+        }
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch student data");
+        return res.json();
+    })
+    .then(data => {
+        setFullName(data.fullName);
+        setCourseNsection(data.courseNsection);
+        setStudentID(data.studentID);
+        setGwa(data.gwa);
+        setPfpView(data.pfp ? data.pfp : null);
+    })
+    .catch(err => console.error(err));
+  };
 
 
     return( 
@@ -131,6 +161,7 @@ function App() {
             id={content.id}
             fullName={content.fullName}
             onDelete={handleDelete}
+            onView={handleView}
             />
         ))}
 
@@ -138,7 +169,17 @@ function App() {
 
     </div>
 
-    <div>temp</div>
+    <div id="student-id">
+
+        <Temp
+        fullName={fullName}
+        courseNsection={courseNsection}
+        studentID={StudentID}
+        gwa={gwa}
+        image={pfpView}
+        />
+      
+    </div>
     </>
     );
 }

@@ -9,7 +9,7 @@ class StudentController extends Controller
 {
    public function addStudent(Request $request)
 {
-    // Validate only required fields
+    // Validate required fields
     $incomingFields = $request->validate([
         'fullName' => 'required',
         'courseNsection' => 'required',
@@ -20,9 +20,10 @@ class StudentController extends Controller
     if ($request->hasFile('pfp')) {
         $file = $request->file('pfp');
         $filename = time() . '_' . $file->getClientOriginalName();
-        $file->storeAs('public/pfp', $filename);
-        $incomingFields['pfp'] = 'storage/pfp/' . $filename;
-    }
+        $path = $file->storeAs('userPfp', $filename, 'public');
+        $incomingFields['pfp'] = 'storage/' . $path;
+        info("File uploaded to: " . $path);
+    } else info("No file received in request");
 
     $student = Student::create($incomingFields);
 
@@ -48,7 +49,7 @@ class StudentController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function show($id)
+    public function viewStudent($id)
 {
     // Find the student by ID
     $student = Student::find($id);

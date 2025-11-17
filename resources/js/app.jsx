@@ -5,13 +5,12 @@ import Summary from "./components/Summary";
 import { useEffect, useState } from "react";
 import Modal from "./components/Modal";
 import Temp from "./components/Temp";
+import Edit from "./components/Edit";
+import { handleSubmit, handleView, handleEdit, handleEditSubmit, handleDelete } from "./functions/mainFunctions";
 
 function App() {
-
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
     const [summary, setSummary] = useState([]);
-    const [students, setStudents] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
     //For Modal
@@ -24,6 +23,15 @@ function App() {
     const [StudentID, setStudentID] = useState("Studen ID");
     const [gwa, setGwa] = useState(0.00);
     const [pfpView, setPfpView] = useState(null);
+
+    //Editing Values
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [editingStudentId, setEditingStudentId] = useState(null);
+    const [editFullName, setEditFullName] = useState("");
+    const [editCourse, setEditCourse] = useState("");
+    const [editStudentID, setEditStudentID] = useState("");
+    const [editGwa, setEditGwa] = useState(0.0);
+    const [editPfp, setEditPfp] = useState(null);
 
     useEffect(() => {
         fetch("/students")
@@ -38,139 +46,67 @@ function App() {
     if (file) setPfp(URL.createObjectURL(file));
     };
 
-  //For removing selected pfp
-  function removePicture(){
-    setPfp(null);
-    if (fileInputRef.current) fileInputRef.current.value = null;
-  };
-
-  //For adding new student
-  const handleSubmit = (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-  formData.append("_token", csrfToken);
-  formData.append("fullName", e.target.fullName.value);
-  formData.append("courseNsection", e.target.courseNsection.value);
-  formData.append("studentID", e.target.studentID.value);
-  formData.append("gwa", e.target.gwa.value);
-
-  if (fileInputRef.current && fileInputRef.current.files[0]) formData.append("pfp", fileInputRef.current.files[0]);
-
-  //console.log([...formData]);
-
-  fetch("/add-student", {
-    method: "POST",
-    body: formData,
-    credentials: "same-origin"
-  })
-  .then(async res => {
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text);
-    }
-    return res.json();
-  })
-    .then(data => {
-    console.log(data);
-    setIsOpen(false);
-    setSummary(prev => [...prev, data.student]);
-    setPfp(null);
-  })
-  .catch(err => console.error(err));
-};
-
-  //Delete Student Data
-  const handleDelete = (id) => {
-    fetch(`/students/${id}`, {
-        method: "DELETE",
-        headers: {
-            "X-CSRF-TOKEN": csrfToken
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) setSummary(prev => prev.filter(student => student.id !== id));
-    })
-    .catch(err => console.error(err));
-  };
-
-  const handleView = (id) =>{
-    console.log(id);
-    fetch(`/student-view/${id}`, {
-      method: "GET",
-      headers: {
-            "X-CSRF-TOKEN": csrfToken
-        }
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Failed to fetch student data");
-        return res.json();
-    })
-    .then(data => {
-        setFullName(data.fullName);
-        setCourseNsection(data.courseNsection);
-        setStudentID(data.studentID);
-        setGwa(data.gwa);
-        setPfpView(data.pfp ? data.pfp : null);
-    })
-    .catch(err => console.error(err));
-  };
-
+    //For removing selected pfp
+    function removePicture(){
+      setPfp(null);
+      if (fileInputRef.current) fileInputRef.current.value = null;
+    };
 
     return( 
     <>
-
     <div id="panel">
-
         <button id="create-btn" onClick={() => setIsOpen(true)}>Add Student</button>
 
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        
-            <h2>Add Student</h2>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}
+        handleFileChange={handleFileChange}
+        removePicture={removePicture}
+        handleSubmit={handleSubmit}
+        pfp={pfp}
+        fileInputRef={fileInputRef}
+        />
 
-            <div id="modal-box">
-
-                <div id="box1">
-
-                    <img id="pfp-preview" 
-                    src={pfp ? pfp : 
-                    "/storage/pfp/pfp.jpg"} alt="pfp-view"/>
-
-                    <input type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef}/>
-                    <button type="button" onClick={removePicture}>Remove Picture</button>
-
-                </div>
-
-                <form onSubmit={handleSubmit} id="student-form">
-                    <input type="text" name="fullName" placeholder="Full Name"/>
-                    <input type="text" name="courseNsection" placeholder="Course & Section"/>
-                    <input type="text" name="studentID" placeholder="Student ID"/>
-                    <input type="text" name="gwa" placeholder="GWA"/>
-                    <input type="submit" name="Save" id=""/>
-                </form>
-            
-            </div>
-
-        </Modal>
-
+        <Edit
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        handleFileChange={handleFileChange}
+        removePicture={() => setEditPfp(null)}
+        handleSubmit={(e) => handleEditSubmit(
+        e,
+        csrfToken,
+        editingStudentId,
+        fileInputRef,
+        editFullName,
+        editCourse,
+        editStudentID,
+        editGwa,
+        setSummary,
+        setIsEditOpen,
+        setEditPfp
+        )}
+        pfp={editPfp}
+        fileInputRef={fileInputRef}
+        fullName={editFullName}
+        setFullName={setEditFullName}
+        course={editCourse}
+        setCourse={setEditCourse}
+        studentID={editStudentID}
+        setStudentID={setEditStudentID}
+        gwa={editGwa}
+        setGwa={setEditGwa}
+      />
         <div id="studen-panel">
-
         {summary.map(content =>(
-            <Summary
-            id={content.id}
-            fullName={content.fullName}
-            onDelete={handleDelete}
-            onView={handleView}
-            />
+           <Summary
+          id={content.id}
+          fullName={content.fullName}
+          onDelete={(id) => handleDelete(id, csrfToken, setSummary)}
+          onView={(id) => handleView(id, csrfToken, setFullName, setCourseNsection, setStudentID, setGwa, setPfpView)}
+          onEdit={(id) => handleEdit(id, summary, setEditingStudentId, setEditFullName, setEditCourse, setEditStudentID, setEditGwa, setEditPfp, setIsEditOpen)}
+          />
         ))}
-
         </div>
-
     </div>
-
     <div id="student-id">
-
         <Temp
         fullName={fullName}
         courseNsection={courseNsection}
@@ -178,7 +114,6 @@ function App() {
         gwa={gwa}
         image={pfpView}
         />
-      
     </div>
     </>
     );
